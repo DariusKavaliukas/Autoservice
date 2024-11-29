@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Pimp My Ride 2.0</h1>
+    <p><strong>Making Your Car Hotter Than Its Engine.</strong></p>
+    <p>About us:</p>
+    <ul>
+        <li><strong>How many services do we provide? </strong> {{ count_services }}</li>
+        <li><strong>Done pimps: </strong> {{ count_completed_orders }}</li>
+        <li><strong>How many customers we have? </strong> {{ count_cars }}</li>
+    </ul>
+{% endblock %}

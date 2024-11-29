@@ -50,6 +50,21 @@ class Order(models.Model):
     car_id =models.ForeignKey('Car', on_delete=models.SET_NULL, null=True)
     deadline = models.DateField("Deadline", null=True)
 
+    ORDER_STATUS = (
+        ('Pending', 'Order Pending'),
+        ('Accepted', 'Order Accepted'),
+        ('In-progress', 'Service In-progress'),
+        ('Done', 'Service Done'),
+        ('Finalized', 'Order Finalized'),
+    )
+
+    status = models.CharField(
+        max_length=11,
+        choices=ORDER_STATUS,
+        default='Pending',
+        help_text='Order Status'
+    )
+
     class Meta:
         ordering = ['order_date']
         verbose_name = 'Order'
