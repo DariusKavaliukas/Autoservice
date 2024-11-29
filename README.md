@@ -1,1 +1,2 @@
-Learning project with Python Django.
+Learning project with Python Django.\n
+Stay tuned..
