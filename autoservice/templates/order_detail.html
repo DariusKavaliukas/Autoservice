@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ order.id }}, ({{ order.order_date }})</h1>
+
+    <p><strong>Order date:</strong> {{ order.order_date }}</p>
+    <p><strong>Car:</strong> <a href="{% url 'car' order.car_id.pk %}">{{ order.car_id }}</a></p>
+    <p><strong>Due date:</strong> {{ order.deadline }}</p>
+    <p><strong>Order status:</strong></p>
+    <p class="{% if order.status == 'Finalized' %}text-success{% elif copy.status == 'Pending' %}text-danger{% else %}text-warning{% endif %}">
+        {{ order.status }}
+    </p>
+    <div style="margin-left:20px;margin:20px">
+        <h4>Order lines</h4>
+
+        {% for line in order.orderline_set.all %}
+            <hr>
+            <p><strong>ID:</strong> {{ line.id }}</p>
+            <p><strong>Service:</strong> {{ line.service_id }}</p>
+            <p><strong>Quantity:</strong> {{ line.quantity }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}
