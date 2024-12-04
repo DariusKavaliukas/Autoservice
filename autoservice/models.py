@@ -32,6 +32,7 @@ class CarModel(models.Model):
         verbose_name_plural = 'Car models'
 
 class Car(models.Model):
+    cover = models.ImageField('Cover', upload_to='covers', null=True)
     national_id = models.CharField('National number', max_length=20, help_text="Car plate")
     car_model_ID = models.ForeignKey('CarModel', on_delete=models.SET_NULL, null=True)
     VIN_code = models.CharField('VIN code', max_length=17,

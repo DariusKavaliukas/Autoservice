@@ -2,3 +2,4 @@
 .venv
 __pychache__/
 main.spec
+db.sqlite3
