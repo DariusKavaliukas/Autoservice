@@ -19,5 +19,27 @@
             <p><strong>Service:</strong> {{ line.service_id }}</p>
             <p><strong>Quantity:</strong> {{ line.quantity }}</p>
         {% endfor %}
+        </br>
+            <h4>Reviews...(don't mind the bad ones - clients are just sometimes stupid...)</h4>
+            {% if order.orderreview_set.all %}
+                {% for review in order.orderreview_set.all %}
+                    <hr>
+                    <strong>{{review.reviewer}}</strong>, <em>{{ review.date_created }}</em>
+                    <p>{{ review.content }}</p>
+                {% endfor %}
+            {% else %}
+                <p>Surprisingly, this order has no reviews ¯\_(ツ)_/¯</p>
+            {% endif %}
+        {% if user.is_authenticated %}
+        <div class="fieldWrapper">
+            <hr><br/>
+            <h4>(RE)consider leaving a review:</h4>
+            <form action="" method="post">
+                {%csrf_token %}
+                {{ form.content }}<br/>
+                <input type="submit" value="Save">
+            </form>
+        </div>
+        {% endif %}
     </div>
 {% endblock %}

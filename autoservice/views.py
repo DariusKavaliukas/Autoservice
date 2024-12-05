@@ -1,9 +1,15 @@
-from django.contrib.admindocs.views import BookmarkletsView
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_protect
+from django.views.generic.edit import FormMixin
 
+from .forms import OrderReviewForm
 from .models import Service, CarModel, Car, Order, OrderLine
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 
 def index(request):
@@ -42,10 +48,64 @@ def car(request, national_id):
 
 class OrdersView(generic.ListView):
     model = Order
-    paginate_by = 1
+    paginate_by = 2
     template_name = 'order_list.html'
 
-class OrderDetailView(generic.DetailView):
+
+class BookDetailView:
+    pass
+
+
+class OrderDetailView(FormMixin, generic.DetailView):
     model = Order
     template_name = 'order_detail.html'
+    form_class = OrderReviewForm
 
+    def get_success_url(self):
+        return reverse('order-detail', kwargs={'pk': self.object.id})
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.order = self.object
+        form.instance.reviewer = self.request.user
+        form.save()
+        return super(OrderDetailView, self).form_valid(form)
+
+class OrdersByUsersListView(LoginRequiredMixin,generic.ListView):
+    model = Order
+    template_name = 'user_orders.html'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).filter(status__exact="Pending").order_by('deadline')
+
+@csrf_protect
+def register(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        password2 =request.POST['password2']
+        if password == password2:
+            if User.objects.filter(username=username).exists():
+                messages.error(request, f'Username {username} is taken! Try not to be as mainstream ;)')
+                return redirect('register')
+            else:
+                if User.objects.filter(email=email).exists():
+                    messages.error(request, f'User with this email address already exist')
+                    return redirect('register')
+                else:
+                    User.objects.create_user(username=username, email=email, password=password)
+                    messages.info(request, f'User {username} has been registered. You can finally use our services!!')
+                    return redirect('login')
+        else:
+            messages.error(request, f'Passwords does not match')
+            return redirect('register')
+    return render(request, 'register.html')

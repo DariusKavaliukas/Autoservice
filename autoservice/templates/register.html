@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container register">
+        <h4>Sign up</h4><br/>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username"><strong>Username</strong></label>
+                <input name="username" type="text" class="form-control" id="username" aria-describedby="usernameHelp">
+                <small id="usernameHelp" class="form-text"><strong>Up to 150 symbols</strong></small>
+            </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1"><strong>Email</strong></label>
+                    <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <small id="emailHelp" class="form-text"><strong>Give us your email (we might (not) leak it to Nigerian scammer organizations)</strong></small>
+                </div>
+                <div class="form-group">
+                    <label for="password"><strong>Password</strong></label>
+                    <input name="password" type="password" class="form-control" id="password" aria-describedby="pwdHelp">
+                    <small id="pwdHelp" class="form-text"><strong>Min. 8 symbols. Be creative, add something more than just numbers</strong></small>
+                </div>
+                <div class="form-group">
+                    <label for="password2"><strong>Repeat password</strong></label>
+                    <input name="password2" type="password" class="form-control" id="password2" aria-describedby="pwd2Help">
+                </div>
+            <button type="submit" class="btn btn-primary register-button"><strong>Sign up</strong></button>
+        </form>
+        <p>Are you GigaChad and already have an account?? <a href="http://127.0.0.1:8000/accounts/login/"><strong>Press here!</strong></a></p>
+    </div>
+
+{% endblock %}

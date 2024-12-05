@@ -1,8 +1,10 @@
+from django.contrib.auth.models import User
 from django.db import models
-from datetime import datetime
+from datetime import datetime, date
 import uuid
 
 from django.db.models import PROTECT
+from tinymce.models import HTMLField
 
 
 class Service(models.Model):
@@ -38,6 +40,7 @@ class Car(models.Model):
     VIN_code = models.CharField('VIN code', max_length=17,
         help_text='17 characters unique number, more: <a href=https://www.autocheck.com/vehiclehistory/vin-basics>VIN</a>')
     client = models.CharField('Client name', max_length=50,help_text="Name Surname")
+    description = HTMLField(default='Great customer')
 
     def __str__(self):
         return f'{self.client}, {self.car_model_ID}, {self.national_id}'
@@ -49,7 +52,14 @@ class Car(models.Model):
 class Order(models.Model):
     order_date = models.DateField('Date', default=datetime.today)
     car_id =models.ForeignKey('Car', on_delete=models.SET_NULL, null=True)
-    deadline = models.DateField("Deadline", null=True)
+    deadline = models.DateField("Deadline", null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    @property
+    def is_overdue(self):
+        if self.deadline and date.today() > self.deadline:
+            return True
+        return False
 
     ORDER_STATUS = (
         ('Pending', 'Order Pending'),
@@ -87,3 +97,12 @@ class OrderLine(models.Model):
     class Meta:
         verbose_name = 'Order line'
         verbose_name_plural = 'Order lines'
+
+class OrderReview(models.Model):
+    order = models.ForeignKey('Order', on_delete=models.SET_NULL, null=True, blank=True)
+    reviewer =models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    content = models.TextField("Review", max_length=1000)
+
+    class Meta:
+        ordering = ['-date_created']

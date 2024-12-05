@@ -9,6 +9,7 @@
         <li>{{ car.client }}</li>
         <li>{{ car.car_model_ID }}</li>
         <li>{{ car.VIN_code }}</li>
+        <li>{{ car.description | safe }}</li>
     </ul>
     </div>
 {% endblock %}

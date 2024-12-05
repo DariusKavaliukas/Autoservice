@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>My orders</h1>
+
+    {% if order_list %}
+    <ul>
+        {% for item in order_list %}
+        <li class="{% if item.is_overdue %}text-danger{% endif %}">
+            <a href="{{ item.id }}">{{item.id}}</a> ({{ item.deadline }})
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% else %}
+        <p>You're the worst customer ever... You have no orders!!!</p>
+        <a href="">Go to order</a>
+    {% endif %}
+{% endblock %}
