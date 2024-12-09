@@ -2,9 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from datetime import datetime, date
 import uuid
-
-from django.db.models import PROTECT
 from tinymce.models import HTMLField
+from PIL import Image
 
 
 class Service(models.Model):
@@ -106,3 +105,18 @@ class OrderReview(models.Model):
 
     class Meta:
         ordering = ['-date_created']
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    photo = models.ImageField(default="profile_pics/default.jpg", upload_to="profile_pics")
+
+    def __str__(self):
+        return f"{self.user.username} profile"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.photo.path)
+        if img.height > 200 or img.width > 200:
+            output_size = (200, 200)
+            img.thumbnail(output_size)
+            img.save(self.photo.path)

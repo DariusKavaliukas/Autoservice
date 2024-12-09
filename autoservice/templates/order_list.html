@@ -5,8 +5,9 @@
     {% if order_list %}
     <ul>
         {% for order in order_list %}
+            <img class="rounded-cicle" src="{{order.user.profile.photo.url}}">
             <li>
-                <a href="{{ order.id }}">{{ order.id}}</a> ({{ order.order_date }})
+                <a href="{{ order.id }}">{{ order.id}}{{ order.order_date }}</a>
             </li>
         {% endfor %}
     </ul>

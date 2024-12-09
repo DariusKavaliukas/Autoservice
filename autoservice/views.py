@@ -7,10 +7,11 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic.edit import FormMixin
 
-from .forms import OrderReviewForm
+from .forms import OrderReviewForm, UserUpdateForm, ProfileUpdateForm
 from .models import Service, CarModel, Car, Order, OrderLine
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     count_services = Service.objects.all().count()
@@ -50,10 +51,6 @@ class OrdersView(generic.ListView):
     model = Order
     paginate_by = 2
     template_name = 'order_list.html'
-
-
-class BookDetailView:
-    pass
 
 
 class OrderDetailView(FormMixin, generic.DetailView):
@@ -109,3 +106,24 @@ def register(request):
             messages.error(request, f'Passwords does not match')
             return redirect('register')
     return render(request, 'register.html')
+
+@login_required
+def profile(request):
+    if request.method == "POST":
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f'Profile was updated successfully')
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+    }
+
+    return render(request, 'profile.html', context)

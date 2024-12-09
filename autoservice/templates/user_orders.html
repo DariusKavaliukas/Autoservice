@@ -7,7 +7,7 @@
     <ul>
         {% for item in order_list %}
         <li class="{% if item.is_overdue %}text-danger{% endif %}">
-            <a href="{{ item.id }}">{{item.id}}</a> ({{ item.deadline }})
+        <a href="{{ order.id }}">{{item.id}}{{ item.deadline }}</a>
         </li>
         {% endfor %}
     </ul>
