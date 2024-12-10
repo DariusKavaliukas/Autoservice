@@ -1,13 +1,14 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic.edit import FormMixin
+from django.views.generic import DetailView, CreateView
+from django.views.generic.edit import FormMixin, UpdateView, DeleteView
 
-from .forms import OrderReviewForm, UserUpdateForm, ProfileUpdateForm
+from .forms import OrderReviewForm, UserUpdateForm, ProfileUpdateForm, UserOrderCreateForm
 from .models import Service, CarModel, Car, Order, OrderLine
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
@@ -81,7 +82,9 @@ class OrdersByUsersListView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).filter(status__exact="Pending").order_by('deadline')
+        return Order.objects.filter(user=self.request.user).order_by('deadline')
+
+
 
 @csrf_protect
 def register(request):
@@ -127,3 +130,41 @@ def profile(request):
     }
 
     return render(request, 'profile.html', context)
+
+class OrderByUserDetailView(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = 'user_order.html'
+
+class OrderByUserCreateView(LoginRequiredMixin, CreateView):
+    model = Order
+    # fields = ['car_id', 'deadline']
+    success_url = '/autoservice/myorders/'
+    template_name = 'user_order_form.html'
+    form_class = UserOrderCreateForm
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class OrderByUserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Order
+    fields = ['car_id', 'deadline']
+    success_url = "/autoservice/myorders/"
+    template_name = 'user_order_form.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        order = self.get_object()
+        return self.request.user == order.user
+
+class OrderByUserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Order
+    success_url = "/autoservice/myorders/"
+    template_name = 'user_order_delete.html'
+
+    def test_func(self):
+        order = self.get_object()
+        return self.request.user == order.user

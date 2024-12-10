@@ -2,16 +2,18 @@
 
 {% block content %}
     <h1>My orders</h1>
-
     {% if order_list %}
-    <ul>
         {% for item in order_list %}
-        <li class="{% if item.is_overdue %}text-danger{% endif %}">
-        <a href="{{ order.id }}">{{item.id}}{{ item.deadline }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+    <hr>
+        <ul>
 
+        <img class="rounded-circle" src="{{item.user.profile.photo.url}}">
+        <li><strong class="{% if item.is_overdue %}text-danger{% endif %}">Order: {{item.id}}, {{ item.deadline }}</strong>
+        <br/>
+        <a class="btn btn-primary" href="{{ item.pk }}" role="button">Review</a>
+        </li>
+    </ul>
+    {% endfor %}
     {% else %}
         <p>You're the worst customer ever... You have no orders!!!</p>
         <a href="">Go to order</a>

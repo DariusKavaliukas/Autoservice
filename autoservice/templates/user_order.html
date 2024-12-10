@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>My order:</h1>
+    <hr>
+        <ul>
+        <img class="rounded-circle" src="{{object.user.profile.photo.url}}">
+        <li><strong class="{% if object.is_overdue %}text-danger{% endif %}">Deadline: {{object.deadline}}</strong></li>
+            {% if object.user == user %}
+            <div>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'my-order-update' order.id %}">Update</a>
+                <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'my-order-delete' order.id %}">Delete</a>
+            </div>
+                {% endif %}
+        <br/>
+      </li>
+    </ul>
+{% endblock %}

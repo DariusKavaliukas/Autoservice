@@ -1,4 +1,4 @@
-from .models import OrderReview, Profile
+from .models import OrderReview, Profile, Order
 from django import forms
 from django.contrib.auth.models import User
 
@@ -20,3 +20,11 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['photo']
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+class UserOrderCreateForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['id', 'car_id', 'deadline']
+        widgets = {'id': forms.HiddenInput(), 'deadline': DateInput()}
