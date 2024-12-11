@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -15,6 +15,6 @@ urlpatterns = [
     path('mybooks/<int:pk>/delete', views.OrderByUserDeleteView.as_view(), name='my-order-delete'),
     path('register/', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
-
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
 

@@ -13,6 +13,7 @@ from .models import Service, CarModel, Car, Order, OrderLine
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import gettext as _
 
 def index(request):
     count_services = Service.objects.all().count()
@@ -106,7 +107,7 @@ def register(request):
                     messages.info(request, f'User {username} has been registered. You can finally use our services!!')
                     return redirect('login')
         else:
-            messages.error(request, f'Passwords does not match')
+            messages.error(request, _('Passwords does not match'))
             return redirect('register')
     return render(request, 'register.html')
 

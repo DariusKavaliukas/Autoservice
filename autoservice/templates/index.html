@@ -1,13 +1,14 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
     <h1>Pimp My Ride 2.0</h1>
-    <p><strong>Making Your Car Hotter Than Its Engine.</strong></p>
+    <p><strong>{% trans "Making Your Car Hotter Than Its Engine." %}</strong></p>
     <p>About us:</p>
     <ul>
-        <li><strong>How many services do we provide? </strong> {{ count_services }}</li>
-        <li><strong>Done pimps: </strong> {{ count_completed_orders }}</li>
-        <li><strong>How many customers we have? </strong> {{ count_cars }}</li>
-        <li><strong>Times visited:</strong> {{ count_visits }} </li>
+        <li><strong>{% trans "How many services do we provide?" %}</strong> {{ count_services }}</li>
+        <li><strong>{% trans "Done pimps:" %}</strong> {{ count_completed_orders }}</li>
+        <li><strong>{% trans "How many customers we have?" %}</strong> {{ count_cars }}</li>
+        <li><strong>{% trans "Times visited:" %}</strong> {{ count_visits }} </li>
     </ul>
+    <img src="/static/css/mechanic_moto.jpg" alt="Yuup, I'm talking about you :)">
 {% endblock %}

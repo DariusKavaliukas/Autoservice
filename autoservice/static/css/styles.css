@@ -1,15 +1,7 @@
-.sidebar-nav {
-    margin-top: 20px;
-    padding:0;
-    list-style: none;
-}
 
 body {
-    background-image: url("car_repair.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
-    background-size: cover;
+    background: #DC9CE8;
+    background: linear-gradient(135deg, #DC9CE8, #FF77E4);
 }
 
 

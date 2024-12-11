@@ -4,6 +4,7 @@ from datetime import datetime, date
 import uuid
 from tinymce.models import HTMLField
 from PIL import Image
+from django.utils.translation import gettext_lazy as _
 
 
 class Service(models.Model):
@@ -49,9 +50,9 @@ class Car(models.Model):
         verbose_name_plural = 'Cars'
 
 class Order(models.Model):
-    order_date = models.DateField('Date', default=datetime.today)
+    order_date = models.DateField(_("Date"), default=datetime.today)
     car_id =models.ForeignKey('Car', on_delete=models.SET_NULL, null=True)
-    deadline = models.DateField("Deadline", null=True, blank=True)
+    deadline = models.DateField(_("Deadline"), null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property

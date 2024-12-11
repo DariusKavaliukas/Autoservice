@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.utils.translation import gettext_lazy as _
 
-from django.conf.global_settings import MEDIA_ROOT, MEDIA_URL, LOGIN_REDIRECT_URL, EMAIL_BACKEND, EMAIL_HOST_PASSWORD
+from django.conf.global_settings import MEDIA_ROOT, MEDIA_URL, LOGIN_REDIRECT_URL, EMAIL_BACKEND, EMAIL_HOST_PASSWORD, \
+    LOCALE_PATHS, LANGUAGES
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -110,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'lt'
 
 TIME_ZONE = 'UTC'
 
@@ -170,3 +173,9 @@ TINYMCE_DEFAULT_CONFIG = {
     }
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
+
+LANGUAGES = (
+    ('en-us', _('English')),
+    ('lt', _('Lithuanian')),
+)
